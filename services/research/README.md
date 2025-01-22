@@ -1,0 +1,1 @@
+This is just a research folder where for each service, prompts and base initialisation will be done. It is irrelevant to the main project and can be referred to for future reference.
