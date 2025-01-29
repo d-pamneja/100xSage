@@ -8,7 +8,65 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id    String     @id @default(cuid())
-  email String  @unique
+model Admin {
+  id String @id @default(cuid())
+  username String @db.VarChar(50)
+  password String @db.VarChar(50)
+  staff Staff[]
+  courses Course[]
+}
+
+model Staff {
+  id String @id @default(cuid())
+  username String @db.VarChar(50)
+  password String @db.VarChar(50)
+  admin_id String
+  admin Admin @relation(fields: [admin_id],references: [id])
+  topics StaffTopic[]
+  tickets Ticket[]
+}
+
+model Course {
+  id Int @id @default(autoincrement())
+  title String @db.VarChar(50)
+  description String @db.VarChar(200)
+  admin_id String
+  admin Admin @relation(fields: [admin_id],references: [id])
+  topics Topic[]
+  contents Content[]
+}
+
+model Content {
+  id Int @id @default(autoincrement())
+  key String 
+  course_id Int
+  course Course @relation(fields: [course_id],references: [id])
+}
+
+model Topic {
+  id Int @id @default(autoincrement())
+  title String @db.VarChar(50)
+  description String @db.VarChar(200)
+  course_id Int
+  course Course @relation(fields: [course_id],references: [id])
+  staff StaffTopic[]
+}
+
+model StaffTopic { // Explict Many to Many Relation
+  staff_id String
+  topic_id Int
+
+  staff Staff @relation(fields : [staff_id],references: [id],onDelete: Cascade)
+  topic Topic @relation(fields : [topic_id],references: [id],onDelete: Cascade)
+
+  @@id([staff_id,topic_id]) // Composite Primrary Key
+}
+
+model Ticket {
+  id String @id @default(cuid())
+  thread_id String @unique
+  title String @db.VarChar(250)
+  description String
+  staff_id String
+  staff Staff @relation(fields: [staff_id],references: [id],onDelete: Cascade)
 }

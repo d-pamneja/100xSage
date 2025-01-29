@@ -5,5 +5,9 @@
   "scripts": {},
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "6.3.0",
+    "prisma": "^6.3.0"
+  }
 }
