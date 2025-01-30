@@ -1,8 +1,10 @@
 {
-  "name": "db",
+  "name": "@web/db",
   "version": "1.0.0",
   "description": "",
-  "scripts": {},
+  "scripts": {
+    "db:push": "prisma db push"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
