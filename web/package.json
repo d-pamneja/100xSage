@@ -2,7 +2,9 @@
   "name": "web",
   "version": "1.0.0",
   "description": "",
-  "scripts": {},
+  "scripts": {
+    "db:push": "pnpm --filter @web/db run db:push"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC"

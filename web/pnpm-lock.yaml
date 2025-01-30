@@ -41,7 +41,7 @@ importers:
 
   apps/frontend:
     dependencies:
-      db:
+      '@web/db':
         specifier: workspace:*
         version: link:../../packages/db
       next:
