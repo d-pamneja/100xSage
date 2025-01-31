@@ -26,20 +26,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         if (validatedFields.success) {
           const { username, password } = validatedFields.data;
-          try {
-            const response = await loginUser({ username, password });
 
-            if (response.status != 200) {
-              return null;
-            } else {
-              const { user } = response.data;
-              if (user) {
-                return user;
-              }
-              return null;
+          const response = await loginUser({ username, password });
+
+          if (response.status != 200) {
+            return null;
+          } else {
+            const { user } = response.data;
+            if (user) {
+              return user;
             }
-          } catch (e) {
-            console.error(e);
             return null;
           }
         }
