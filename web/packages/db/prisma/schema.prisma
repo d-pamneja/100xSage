@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output = "../generated/client"
+  output   = "../generated/client"
 }
 
 datasource db {
@@ -8,65 +8,105 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id       String @id @default(cuid())
+  username String @unique @db.VarChar(20)
+  password String @db.VarChar(255)
+  role     Role   @default(STAFF)
+
+  admin_id String?
+  admin    Admin?
+
+  staff_id String?
+  staff    Staff?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
 model Admin {
-  id String @id @default(cuid())
-  username String @db.VarChar(50)
-  password String @db.VarChar(50)
-  staff Staff[]
+  id      String   @id @default(cuid())
+  user    User     @relation(fields: [id], references: [id])
+  staff   Staff[]
   courses Course[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
 
 model Staff {
-  id String @id @default(cuid())
-  username String @db.VarChar(50)
-  password String @db.VarChar(50)
+  id       String       @id @default(cuid())
+  user     User         @relation(fields: [id], references: [id])
   admin_id String
-  admin Admin @relation(fields: [admin_id],references: [id])
-  topics StaffTopic[]
-  tickets Ticket[]
+  admin    Admin        @relation(fields: [admin_id], references: [id])
+  topics   StaffTopic[]
+  tickets  Ticket[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
 
 model Course {
-  id Int @id @default(autoincrement())
-  title String @db.VarChar(50)
-  description String @db.VarChar(200)
-  admin_id String
-  admin Admin @relation(fields: [admin_id],references: [id])
-  topics Topic[]
-  contents Content[]
+  id          Int       @id @default(autoincrement())
+  title       String    @db.VarChar(50)
+  description String    @db.VarChar(200)
+  admin_id    String
+  admin       Admin     @relation(fields: [admin_id], references: [id])
+  topics      Topic[]
+  contents    Content[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
 
 model Content {
-  id Int @id @default(autoincrement())
-  key String 
+  id        Int    @id @default(autoincrement())
+  key       String
   course_id Int
-  course Course @relation(fields: [course_id],references: [id])
+  course    Course @relation(fields: [course_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
 
 model Topic {
-  id Int @id @default(autoincrement())
-  title String @db.VarChar(50)
-  description String @db.VarChar(200)
-  course_id Int
-  course Course @relation(fields: [course_id],references: [id])
-  staff StaffTopic[]
+  id          Int          @id @default(autoincrement())
+  title       String       @db.VarChar(50)
+  description String       @db.VarChar(200)
+  course_id   Int
+  course      Course       @relation(fields: [course_id], references: [id])
+  staff       StaffTopic[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
 
-model StaffTopic { // Explict Many to Many Relation
+model StaffTopic {
   staff_id String
   topic_id Int
 
-  staff Staff @relation(fields : [staff_id],references: [id],onDelete: Cascade)
-  topic Topic @relation(fields : [topic_id],references: [id],onDelete: Cascade)
+  staff Staff @relation(fields: [staff_id], references: [id], onDelete: Cascade)
+  topic Topic @relation(fields: [topic_id], references: [id], onDelete: Cascade)
 
-  @@id([staff_id,topic_id]) // Composite Primrary Key
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@id([staff_id, topic_id])
 }
 
 model Ticket {
-  id String @id @default(cuid())
-  thread_id String @unique
-  title String @db.VarChar(250)
+  id          String @id @default(cuid())
+  thread_id   String @unique
+  title       String @db.VarChar(250)
   description String
-  staff_id String
-  staff Staff @relation(fields: [staff_id],references: [id],onDelete: Cascade)
+  staff_id    String
+  staff       Staff  @relation(fields: [staff_id], references: [id], onDelete: Cascade)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  STAFF
 }
