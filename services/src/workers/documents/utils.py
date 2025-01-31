@@ -94,7 +94,7 @@ def get_embedding(text) :
     except Exception as e:
         raise CustomException(e,sys)
     
-def create_vectors(text_chunks,KEY,USER_ID,DOCUMENT_NAME,DOCUMENT_TYPE):
+def create_vectors(text_chunks,KEY,USER_ID,COURSE_ID,TOPIC_NAME,DOCUMENT_NAME,DOCUMENT_TYPE):
     """
         Function to convert the text chunks into pinecone records to upsert into our index
     
@@ -102,6 +102,8 @@ def create_vectors(text_chunks,KEY,USER_ID,DOCUMENT_NAME,DOCUMENT_TYPE):
             text_chunks : A string which will contain either the text chunk or the user query
             KEY : The exact location of the file in AWS cloud, used to store in metadata of record
             USER_ID : The userID of the user who created this document, used to store in metadata of record
+            COURSE_ID : The courseID of the course the chunk is from, used to store in metadata of record
+            TOPIC_NAME : The topic name of the topic the chunk is from, used to store in metadata of record
             DOCUMENT_NAME : The name of the document the chunk is from, used to store in metadata of record
             DOCUMENT_TYPE : The type of document the chunk is from, used to store in metadata of record
             
@@ -121,8 +123,10 @@ def create_vectors(text_chunks,KEY,USER_ID,DOCUMENT_NAME,DOCUMENT_TYPE):
             entry["values"] = get_embedding(chunk.page_content)
             entry["metadata"] = {
                 "userID" : USER_ID,
-                "document_name" : DOCUMENT_NAME,
+                "courseID" : COURSE_ID,
+                "topic_name" : TOPIC_NAME,
                 "type" : DOCUMENT_TYPE,
+                "document_name" : DOCUMENT_NAME,
                 "key" : KEY,
                 "chunk" : chunk.page_content,
                 "page_number" : chunk.metadata["page"],

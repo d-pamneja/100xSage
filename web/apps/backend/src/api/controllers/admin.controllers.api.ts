@@ -2,6 +2,7 @@ import { Request,Response,NextFunction } from "express";
 import { S3Client,GetObjectCommand, HeadObjectCommand, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3"
 import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+
 import dotenv from 'dotenv'; 
 dotenv.config()
 
@@ -86,12 +87,12 @@ export const setObject = async (req: Request, res: Response): Promise<any> => {
     try {
         const { userID, courseID, topicID, type, filename,contentType } = req.body;
         
-        const fullPath = `${userID}/${courseID}/${type}/${filename}`;
+        const fullPath = `${userID}/${courseID}/${topicID}/${type}/${filename}`;
 
         const userFolder = `${userID}/`;
         const courseFolder = `${userID}/${courseID}`
         const topicFolder = `${userID}/${courseID}/${topicID}`
-        const typeFolder = `${userID}/${courseID}/${type}/`;
+        const typeFolder = `${userID}/${courseID}/${topicID}/${type}/`;
 
         if (!await checkObjectExistence(userFolder)) {
             await ensureFolderExists(userFolder);
@@ -140,7 +141,9 @@ export const setObject = async (req: Request, res: Response): Promise<any> => {
 
 export const send_POST_SQS = async (req: Request, res: Response): Promise<any> => {
     try {
-        const { userID, type, filename,fullPath,url } = req.body; 
+        const { userID, courseID, topicID,type, filename,fullPath,url } = req.body; 
+
+        const topicName = "RANDOM"
 
         const input = { 
             QueueUrl: SQS_QUEUE_URL, 
@@ -159,6 +162,8 @@ export const send_POST_SQS = async (req: Request, res: Response): Promise<any> =
                 DataType: "String", 
                 StringValue: JSON.stringify({ 
                     user_id : userID ,
+                    course_id : courseID,
+                    topic_name : topicName,
                     name : filename,
                     doc_type: type, 
                 }) 

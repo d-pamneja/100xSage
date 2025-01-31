@@ -91,7 +91,7 @@ export const setObject = async (req: Request, res: Response): Promise<any> => {
         const userFolder = `${userID}/`;
         const courseFolder = `${userID}/${courseID}`
         const topicFolder = `${userID}/${courseID}/${topicID}`
-        const typeFolder = `${userID}/${courseID}/QA_Pairs/`;
+        const typeFolder = `${userID}/${courseID}/${topicID}/QA_Pairs/`;
 
         if (!await checkObjectExistence(userFolder)) {
             await ensureFolderExists(userFolder);
