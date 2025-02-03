@@ -141,9 +141,7 @@ export const setObject = async (req: Request, res: Response): Promise<any> => {
 
 export const send_POST_SQS = async (req: Request, res: Response): Promise<any> => {
     try {
-        const { userID, courseID, topicID,type, filename,fullPath,url } = req.body; 
-
-        const topicName = "RANDOM"
+        const { userID, courseID, topicName,type, filename,fullPath,url } = req.body; 
 
         const input = { 
             QueueUrl: SQS_QUEUE_URL, 

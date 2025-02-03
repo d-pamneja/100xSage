@@ -22,6 +22,9 @@ importers:
       '@types/dotenv':
         specifier: ^8.2.3
         version: 8.2.3
+      '@web/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       dotenv:
         specifier: ^16.4.7
         version: 16.4.7

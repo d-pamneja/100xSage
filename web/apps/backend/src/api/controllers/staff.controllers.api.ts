@@ -2,6 +2,9 @@ import { Request,Response,NextFunction } from "express";
 import { S3Client,GetObjectCommand, HeadObjectCommand, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3"
 import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+
+import {prisma} from "@web/db";
+
 import dotenv from 'dotenv'; 
 dotenv.config()
 
@@ -84,17 +87,17 @@ const ensureFolderExists = async (folderPath: string): Promise<void> => {
 
 export const setObject = async (req: Request, res: Response): Promise<any> => {
     try {
-        const { userID, courseID, topicID, thread_id,contentType } = req.body;
+        const { adminID, courseID, topicID, threadID,contentType } = req.body;
         
-        const fullPath = `${userID}/${courseID}/${topicID}/QA_Pairs/${thread_id}`;
+        const fullPath = `${adminID}/${courseID}/${topicID}/QA_Pairs/${threadID}`;
 
-        const userFolder = `${userID}/`;
-        const courseFolder = `${userID}/${courseID}`
-        const topicFolder = `${userID}/${courseID}/${topicID}`
-        const typeFolder = `${userID}/${courseID}/${topicID}/QA_Pairs/`;
+        const adminFolder = `${adminID}/`;
+        const courseFolder = `${adminID}/${courseID}`
+        const topicFolder = `${adminID}/${courseID}/${topicID}`
+        const typeFolder = `${adminID}/${courseID}/${topicID}/QA_Pairs/`;
 
-        if (!await checkObjectExistence(userFolder)) {
-            await ensureFolderExists(userFolder);
+        if (!await checkObjectExistence(adminFolder)) {
+            await ensureFolderExists(adminFolder);
         }
 
         if (!await checkObjectExistence(courseFolder)) {
@@ -140,7 +143,7 @@ export const setObject = async (req: Request, res: Response): Promise<any> => {
 
 export const send_POST_SQS = async (req: Request, res: Response): Promise<any> => {
     try {
-        const { userID, courseID, topicID, threadID,fullPath,url } = req.body; 
+        const { adminID, courseID, topicID, threadID,fullPath,url } = req.body; 
 
         const input = { 
             QueueUrl: SQS_QUEUE_URL, 
@@ -158,7 +161,7 @@ export const send_POST_SQS = async (req: Request, res: Response): Promise<any> =
               properties: { 
                 DataType: "String", 
                 StringValue: JSON.stringify({ 
-                    user_id : userID ,
+                    admin_id : adminID ,
                     course_id : courseID,
                     topic_id : topicID,
                     thread_id : threadID
@@ -213,7 +216,7 @@ export const removeObject = async (req : Request, res: Response) : Promise<any> 
 
 export const send_DELETE_SQS = async (req: Request, res: Response): Promise<any> => {
     try {
-        const { userID,courseID,topicID,threadID,key } = req.body; 
+        const { adminID,courseID,topicID,threadID,key } = req.body; 
 
         const input = { 
             QueueUrl: SQS_QUEUE_URL, 
@@ -227,7 +230,7 @@ export const send_DELETE_SQS = async (req: Request, res: Response): Promise<any>
               properties: { 
                 DataType: "String", 
                 StringValue: JSON.stringify({ 
-                    user_id : userID ,
+                    admin_id : adminID ,
                     course_id : courseID,
                     topic_id : topicID,
                     thread_id : threadID

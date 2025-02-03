@@ -1,5 +1,5 @@
 from src.workers.documents.instances import index_knowledge_base
-from src.instances import embedding_model
+from src.workers.utils import get_embedding
 from src.dependencies import os,sys,requests,TextLoader,PyPDFLoader,RecursiveCharacterTextSplitter
 from src.exception import CustomException
 from src.logger import logging
@@ -72,29 +72,7 @@ def chunk_data(data):
         raise CustomException(e,sys)
     
 
-def get_embedding(text) :
-    """
-        Function to convert the text string into embeddings using text-embedding-3-small from OpenAI
-    
-        Args:
-            text : A string which will contain either the text chunk or the user query
-            
-        Returns:
-            vector : A vector of 1536 dimensions
-    """
-    
-    try:
-        response = embedding_model.create(
-            input=text,
-            model="text-embedding-3-small"
-        )
-        
-        return response.data[0].embedding   
-    
-    except Exception as e:
-        raise CustomException(e,sys)
-    
-def create_vectors(text_chunks,KEY,USER_ID,COURSE_ID,TOPIC_NAME,DOCUMENT_NAME,DOCUMENT_TYPE):
+def create_KB_vectors(text_chunks,KEY,USER_ID,COURSE_ID,TOPIC_NAME,DOCUMENT_NAME,DOCUMENT_TYPE):
     """
         Function to convert the text chunks into pinecone records to upsert into our index
     
@@ -141,7 +119,7 @@ def create_vectors(text_chunks,KEY,USER_ID,COURSE_ID,TOPIC_NAME,DOCUMENT_NAME,DO
     except Exception as e:
         raise CustomException(e,sys)
     
-def upsert_vectors(vectors):
+def upsert_KB_vectors(vectors):
     """
         Function to upsert the vector records into the index
     
@@ -164,7 +142,7 @@ def upsert_vectors(vectors):
     except Exception as e:
         raise CustomException(e,sys)
     
-def delete_vectors(key):
+def delete_KB_vectors(key):
     """
         Function to delete vectors associated to a given document
     
