@@ -17,12 +17,7 @@ export default {
   trustHost: true,
   providers: [],
   callbacks: {
-    async jwt({ token, user, account }) {
-      if (account?.provider == "google") {
-        token.sub = account.providerAccountId;
-        token.role = "USER";
-        return token;
-      }
+    async jwt({ token, user }) {
       const customUser = user as CustomUser;
       if (user?.id) {
         token.sub = customUser.id;
