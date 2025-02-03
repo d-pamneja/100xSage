@@ -1,11 +1,9 @@
 # Importing the dependencies
-from API.dependencies import *
-from src.dependencies import *
-from src.instances import *
-from src.workers.documents.utils import *
-from src.workers.documents.instances import *
-from API.schemas.documents import StoreDoc, DeleteDoc
-from API.utils import process_incoming_SQS_knowledge_base
+from API.dependencies import Lock,FastAPI,CORSMiddleware,ThreadPoolExecutor
+from src.dependencies import time,logging
+from src.workers.documents.instances import knowledge_base_SQS_queue
+from src.workers.QA.instances import QA_base_SQS_queue
+from API.utils import process_incoming_SQS_knowledge_base,process_incoming_SQS_QA_base
 
 # Global Lock for SQS Messages
 message_processing_lock = Lock()
@@ -25,7 +23,7 @@ app.add_middleware(
 )
 
 
-def sqs_polling():
+def KB_sqs_polling():
     while True:
         response = knowledge_base_SQS_queue.receive_messages(
             MaxNumberOfMessages=1,
@@ -39,14 +37,31 @@ def sqs_polling():
                 process_incoming_SQS_knowledge_base(message)
 
         time.sleep(5) 
+        
+def QA_sqs_polling():
+    while True:
+        response = QA_base_SQS_queue.receive_messages(
+            MaxNumberOfMessages=1,
+            MessageAttributeNames=["All"],
+            VisibilityTimeout=10,
+        )
+
+        if response:
+            message = response[0]
+            if(message is not None):
+                process_incoming_SQS_QA_base(message)
+
+        time.sleep(5) 
 
 
 # Startup event to launch polling as a thread
 @app.on_event("startup")
 async def startup_event():
     logging.info("Starting SQS polling...")
-    polling_thread = threading.Thread(target=sqs_polling, daemon=True)
-    polling_thread.start()
+    executor = ThreadPoolExecutor(max_workers=8)
+    
+    executor.submit(KB_sqs_polling)
+    executor.submit(QA_sqs_polling)
     
 @app.get("/")
 def home():
