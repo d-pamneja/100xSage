@@ -26,20 +26,19 @@ export default NextAuth(authConfig).auth(async (req) => {
 
   if (isAuthRoute) {
     if (isLoggedIn) {
-      return Response.redirect(new URL("/dashboard", nextUrl));
+      return Response.redirect(new URL("/admin/dashboard", nextUrl));
     }
     return undefined;
   }
 
   if (!isLoggedIn && !isPublicRoute) {
-    console.log("auth in the middleware was ", req.auth);
     return Response.redirect(
       nextUrl.origin + "/login?callbackUrl=" + nextUrl.href,
     );
   }
 
   if (isLoggedIn && nextUrl.pathname === "/") {
-    return Response.redirect(nextUrl.origin + "/dashboard");
+    return Response.redirect(nextUrl.origin + "/admin/dashboard");
   }
 
   return undefined;
