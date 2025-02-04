@@ -1,11 +1,16 @@
 import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
-import authConfig from "@/auth.config";
+import authConfig, { CustomUser } from "@/auth.config";
 
 export default NextAuth(authConfig).auth(async (req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
+
+  const user = req.auth?.user as CustomUser | undefined;
+  const role = user?.role;
+
+  const isStaff = role?.toLowerCase() === "staff";
 
   const isPublicRoute = ["/"].includes(nextUrl.pathname);
   const isAuthRoute = ["/login", "/signup"].includes(nextUrl.pathname);
@@ -26,6 +31,12 @@ export default NextAuth(authConfig).auth(async (req) => {
 
   if (isAuthRoute) {
     if (isLoggedIn) {
+      if (!role) {
+        return Response.redirect(new URL("/login", nextUrl));
+      }
+      if (isStaff) {
+        return Response.redirect(new URL("/staff/dashboard", nextUrl));
+      }
       return Response.redirect(new URL("/admin/dashboard", nextUrl));
     }
     return undefined;
@@ -38,6 +49,15 @@ export default NextAuth(authConfig).auth(async (req) => {
   }
 
   if (isLoggedIn && nextUrl.pathname === "/") {
+    if (isStaff) {
+      return Response.redirect(new URL("/staff/dashboard", nextUrl));
+    }
+    return Response.redirect(nextUrl.origin + "/admin/dashboard");
+  }
+  if (isLoggedIn && isStaff && nextUrl.pathname.startsWith("/admin")) {
+    return Response.redirect(nextUrl.origin + "/staff/dashboard");
+  }
+  if (isLoggedIn && !isStaff && nextUrl.pathname.startsWith("/staff")) {
     return Response.redirect(nextUrl.origin + "/admin/dashboard");
   }
 
