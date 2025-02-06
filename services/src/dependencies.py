@@ -16,6 +16,16 @@ from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 from langchain.schema import HumanMessage, AIMessage
 
+from crewai import Agent, Task, Crew, Process
+from crewai.project import CrewBase, agent, crew, task
+from crewai.tools import BaseTool
+from typing import List
+
+from pydantic import BaseModel, Field
+from typing import Optional,List,Type
+from pathlib import Path
+import yaml
+
 import validators
 import requests
 import os
@@ -44,6 +54,7 @@ PINECONE_QA_BASE_INDEX_NAME = os.getenv("PINECONE_QA_BASE_INDEX_NAME")
 
 # Pinecone QA Base - ID Creds
 ADMIN_ID_QA = os.getenv("ADMIN_ID_QA")
+ADMIN_ID_QA_QUERY = os.getenv("ADMIN_ID_QA_QUERY")
 COURSE_ID_QA = os.getenv("COURSE_ID_QA")
 TOPIC_ID_QA = os.getenv("TOPIC_ID_QA")
 

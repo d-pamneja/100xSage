@@ -1,7 +1,7 @@
 from src.instances import openAI_client,embedding_model
 from src.exception import CustomException
 from src.logger import logging
-from src.workers.utils import get_embedding
+from src.utils import get_embedding
 from src.dependencies import os,json,sys,time,uuid,requests,TextLoader,QA_SUMMARISER_OPENAI_ASSISTANT_ID,ADMIN_ID_QA,COURSE_ID_QA,TOPIC_ID_QA
 from src.workers.QA.instances import qa_summariser_thread,index_qa_base
 

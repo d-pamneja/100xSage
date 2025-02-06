@@ -6,3 +6,5 @@ embedding_model = openAI_client.embeddings
 
 # Pinecone Initialisation
 pc = Pinecone(api_key = PINECONE_API_KEY, environment = PINECONE_API_ENV)
+
+

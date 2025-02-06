@@ -1,0 +1,10 @@
+edit:
+  description: "To edit and give the status of work and final output as a recommendation to the student, if any content is given by the writer"
+  expected_output: |
+    A JSON object consisting of all the final output given by the editor, with the following structure:
+      - status: The status code of the team's findings. If any content is given by the writer, then 200, else 404.
+      - relevance: A boolean value indicating whether the team was able to complete the task or not.
+      - solution: The final edited solution from the editor. If none, then return the string "NA".
+      - source: The exact thread ID on Discord from which this solution is quoted. If none, then return the string "NA".
+  agent: editor
+  output_pydantic: EditorOutput

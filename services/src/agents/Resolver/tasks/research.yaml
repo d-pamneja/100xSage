@@ -1,0 +1,12 @@
+research:
+  description: "To research and find the most relevant documents and references to the given query: {query}"
+  expected_output: |
+    A list consisting of all the relevant documents, where each document (JSON) follows the structure:
+      - id: The thread ID of that conversation on Discord
+      - score: The relevance of the said document, with 0 being the lowest, 1 being the highest, and -1 being irrelevant
+      - question: The primary question which was asked in the thread
+      - answer: The answer/solution which was provided to that thread
+  agent: researcher
+  parameters:
+    query: "str"
+  output_pydantic: ResearcherOutput

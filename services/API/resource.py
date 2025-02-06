@@ -1,9 +1,14 @@
 # Importing the dependencies
 from API.dependencies import Lock,FastAPI,CORSMiddleware,ThreadPoolExecutor
-from src.dependencies import time,logging
-from src.workers.documents.instances import knowledge_base_SQS_queue
-from src.workers.QA.instances import QA_base_SQS_queue
-from API.utils import process_incoming_SQS_knowledge_base,process_incoming_SQS_QA_base
+from API.dependencies import HTTPException
+from API.schemas.resolver import ResolverInput
+from API.pollers import KB_sqs_polling,QA_sqs_polling
+
+from src.dependencies import logging,json
+from src.exception import CustomException
+from src.agents.Resolver.schemas.editor import EditorOutput
+from src.agents.Resolver.crew import ResolverCrew
+
 
 # Global Lock for SQS Messages
 message_processing_lock = Lock()
@@ -22,38 +27,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-def KB_sqs_polling():
-    while True:
-        response = knowledge_base_SQS_queue.receive_messages(
-            MaxNumberOfMessages=1,
-            MessageAttributeNames=["All"],
-            VisibilityTimeout=10,
-        )
-
-        if response:
-            message = response[0]
-            if(message is not None):
-                process_incoming_SQS_knowledge_base(message)
-
-        time.sleep(5) 
-        
-def QA_sqs_polling():
-    while True:
-        response = QA_base_SQS_queue.receive_messages(
-            MaxNumberOfMessages=1,
-            MessageAttributeNames=["All"],
-            VisibilityTimeout=10,
-        )
-
-        if response:
-            message = response[0]
-            if(message is not None):
-                process_incoming_SQS_QA_base(message)
-
-        time.sleep(5) 
-
-
 # Startup event to launch polling as a thread
 @app.on_event("startup")
 async def startup_event():
@@ -66,3 +39,18 @@ async def startup_event():
 @app.get("/")
 def home():
     return "Hello from 100xSage Services!"
+
+@app.post("/resolve",response_model = EditorOutput)
+async def resolver(userInput : ResolverInput):
+    """Endpoint to recommend answer to user query if solved previosuly from threads"""
+    try:
+        logging.info(f"New search for input : {userInput.query}")
+        result = ResolverCrew().crew().kickoff(inputs={"query": userInput.query})
+        answer = json.loads(result.raw)
+        logging.info(f"Recommendation generated : {answer['solution']}")
+        
+        return answer
+    except CustomException as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Internal Server Error: {e}")
