@@ -1,0 +1,50 @@
+{
+  "t": "MESSAGE_CREATE",
+  "s": 2,
+  "op": 0,
+  "d": {
+    "type": 0,
+    "tts": false,
+    "timestamp": "2025-02-07T05:50:24.911000+00:00",
+    "position": 1,
+    "pinned": false,
+    "nonce": "1337299406986149888",
+    "mentions": [],
+    "mention_roles": [],
+    "mention_everyone": false,
+    "member": {
+      "roles": [],
+      "premium_since": null,
+      "pending": false,
+      "nick": null,
+      "mute": false,
+      "joined_at": "2025-02-06T13:52:49.464000+00:00",
+      "flags": 0,
+      "deaf": false,
+      "communication_disabled_until": null,
+      "banner": null,
+      "avatar": null
+    },
+    "id": "1337299408932442133",
+    "flags": 0,
+    "embeds": [],
+    "edited_timestamp": null,
+    "content": "dwqejcwhjb",
+    "components": [],
+    "channel_type": 11,
+    "channel_id": "1337299067985723403",
+    "author": {
+      "username": "d4348",
+      "public_flags": 0,
+      "primary_guild": null,
+      "id": "798084355981312080",
+      "global_name": "DP",
+      "discriminator": "0",
+      "clan": null,
+      "avatar_decoration_data": null,
+      "avatar": "7a2d9a4036ec4d2e2ce58a73b78e5d61"
+    },
+    "attachments": [],
+    "guild_id": "1337058423262674954"
+  }
+}

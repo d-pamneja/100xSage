@@ -1,0 +1,28 @@
+{
+  "t": "THREAD_CREATE",
+  "s": 4,
+  "op": 0,
+  "d": {
+    "type": 11,
+    "total_message_sent": 0,
+    "thread_metadata": {
+      "locked": false,
+      "create_timestamp": "2025-02-07T05:58:50.757000+00:00",
+      "auto_archive_duration": 4320,
+      "archived": false,
+      "archive_timestamp": "2025-02-07T05:58:50.757000+00:00"
+    },
+    "rate_limit_per_user": 0,
+    "parent_id": "1337059722372710541",
+    "owner_id": "798084355981312080",
+    "newly_created": true,
+    "name": "ek check karte",
+    "message_count": 0,
+    "member_ids_preview": ["798084355981312080"],
+    "member_count": 1,
+    "last_message_id": null,
+    "id": "1337301530604474449",
+    "guild_id": "1337058423262674954",
+    "flags": 0
+  }
+}
