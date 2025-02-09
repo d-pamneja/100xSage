@@ -2,7 +2,7 @@ from src.agents.Resolver.crew import ResolverCrew
 from src.agents.Resolver.schemas.editor import EditorOutput
 from src.dependencies import json,logging
 
-def resolve_query(user_query) -> EditorOutput:
+async def resolve_query(user_query) -> EditorOutput:
     """
         Function to process user query (used internally and in API).
         
@@ -14,7 +14,7 @@ def resolve_query(user_query) -> EditorOutput:
     """
     try:
         logging.info(f"New search for input: {user_query}")
-        result = ResolverCrew().crew().kickoff(inputs={"query": user_query})
+        result = await ResolverCrew().crew().kickoff_async(inputs={"query": user_query})
         answer = json.loads(result.raw)
         logging.info(f"Recommendation generated: {answer['solution']}")
         

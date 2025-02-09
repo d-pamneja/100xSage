@@ -1,10 +1,11 @@
 # Importing the dependencies
-from API.dependencies import Lock,FastAPI,CORSMiddleware,ThreadPoolExecutor
+from API.dependencies import Lock,FastAPI,CORSMiddleware,ThreadPoolExecutor,DISCORD_BOT_TOKEN
 from API.dependencies import HTTPException,asyncio
 from API.schemas.agents.resolver import ResolverInput
 from API.polling.pollers import KB_sqs_polling,QA_sqs_polling
 from API.utils import resolve_query
 from API.discord.websocket import persist_discord_connection
+from API.discord.bot import bot,run_discord_bot
 
 from src.dependencies import logging,json
 from src.exception import CustomException
@@ -32,8 +33,8 @@ app.add_middleware(
 @app.on_event("startup")
 async def startup_event():
     logging.info("Starting background tasks and processes...")
-    asyncio.create_task(persist_discord_connection())
-    
+    asyncio.create_task(run_discord_bot())
+    asyncio.create_task(persist_discord_connection(bot))
     
     executor = ThreadPoolExecutor(max_workers=8)
     

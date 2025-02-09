@@ -18,12 +18,15 @@ import sys
 import time
 import websockets
 import discord
+import random
 
 import os
 from dotenv import load_dotenv
 load_dotenv()
 
 DISCORD_AUTH_TOKEN = os.getenv('DISCORD_AUTH_TOKEN')
+DISCORD_BOT_TOKEN = os.getenv('DISCORD_BOT_TOKEN')
 DISCORD_GATEWAY_URL = os.getenv('DISCORD_GATEWAY_URL')
 DISCORD_GUILD_ID = os.getenv('DISCORD_GUILD_ID')
 DISCORD_PARENT_ID = os.getenv('DISCORD_PARENT_ID')
+
