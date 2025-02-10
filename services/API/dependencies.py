@@ -10,6 +10,9 @@ import validators
 from requests import request
 import discord
 from discord.ext import commands
+from discord import app_commands
+from datetime import datetime, timedelta
+import redis
 import threading
 import boto3
 import asyncio
@@ -17,7 +20,6 @@ import json
 import sys
 import time
 import websockets
-import discord
 import random
 
 import os

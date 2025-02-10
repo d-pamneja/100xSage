@@ -220,7 +220,7 @@ class DiscordWebSocket:
     async def handle_thread_create(self, event):
         """Handle thread creation events"""
         guild_id = event['d']['guild_id']
-        if guild_id == DISCORD_GUILD_ID:
+        if (guild_id and (guild_id == DISCORD_GUILD_ID)):
             if event['d']['newly_created']:
                 parent_id = event['d']['parent_id']
                 if parent_id == DISCORD_PARENT_ID:
@@ -234,7 +234,7 @@ class DiscordWebSocket:
     async def handle_message_create(self, event):
         """Handle message creation events"""
         guild_id = event['d']['guild_id']
-        if guild_id == DISCORD_GUILD_ID:
+        if (guild_id and (guild_id == DISCORD_GUILD_ID)):
             message_channel_id = event['d']['channel_id']
             message_author = event['d']['author']['username']
             
