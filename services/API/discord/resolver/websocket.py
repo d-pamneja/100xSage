@@ -192,7 +192,7 @@ class DiscordWebSocket:
         """
         embed = discord.Embed(
             title="Hmmm, I think this may have been solved before 🤔",
-            description=f"**──────────**\n\n{ai_response}\n\n",
+            description=f"\n\n{ai_response}\n\n",
             color=0x9B59B6
         )
 
@@ -255,8 +255,7 @@ class DiscordWebSocket:
                             
                             if(response['status']==200):    
                                 thread_id = int(self.threads[-1]['id'])
-                                thread_link = f"discord://discord.com/channels/{DISCORD_GUILD_ID}/{DISCORD_PARENT_ID}/threads/1338090859278631004"
-                                # thread_link = f"https://discord.com/channels/{DISCORD_GUILD_ID}/{DISCORD_PARENT_ID}/threads/{response['source']}"
+                                thread_link = f"https://discord.com/channels/{DISCORD_GUILD_ID}/{DISCORD_PARENT_ID}/threads/{response['source']}"
 
                                 await self.send_ai_response_to_thread(thread_id, response['solution'], thread_link)
                                  

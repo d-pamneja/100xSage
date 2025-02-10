@@ -4,7 +4,7 @@ from API.dependencies import HTTPException,asyncio
 from API.schemas.agents.resolver import ResolverInput
 from API.polling.pollers import KB_sqs_polling,QA_sqs_polling
 from API.utils import resolve_query
-from API.discord.websocket import persist_discord_connection
+from API.discord.resolver.websocket import persist_discord_connection
 from API.discord.bot import bot,run_discord_bot
 
 from src.dependencies import logging,json
