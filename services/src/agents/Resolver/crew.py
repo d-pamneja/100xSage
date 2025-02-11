@@ -51,6 +51,13 @@ class ResolverCrew():
                     hence it is important you MUST give the thread ID to your editor, should you find a relevant answer.\n
                     In case you find the research to be irrelevant, you can just let your editor know that there is no such query or solution solved 
                     previously to the said developer. There is no need to solve it yourself, only solve if your have the relevant research.
+                    
+                    IMPORTANT GUIDELINES : 
+                    \t1.IF YOU FIND THE RESEARCH TO BE IRRELEVANT, YOU CAN JUST LET YOUR EDITOR KNOW THAT THERE IS NO SUCH DOCUMENT OR SOLUTION AS PER OFFICIAL DOCUMENTATION.
+                    \t2.IF YOU FIND THE RESEARCH TO BE NULL OR AN EMPTY LIST, YOU CAN JUST LET YOUR EDITOR KNOW THAT THERE IS NO SUCH DOCUMENT OR SOLUTION AS PER OFFICIAL DOCUMENTATION.
+                    \t3.IF THE SCORE OF ANY INDIVIDUAL DOCUMENT IS BELOW 0.3, YOU CAN JUST LET YOUR EDITOR KNOW THAT THERE IS NO SUCH DOCUMENT OR SOLUTION AS PER OFFICIAL DOCUMENTATION.
+                    
+                    \n\nREMEMBER : There is no need to solve it yourself, only solve if your have the relevant research and it follows the above guidelines.
             """,
             allow_delegation = False,
             verbose = True

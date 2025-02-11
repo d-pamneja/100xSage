@@ -6,3 +6,4 @@ class newThread(BaseModel):
     description : str = Field(...,description="The description of the new thread as given by the user")
     timestamp : str = Field(...,description="The timestamp when this thread was created")
     author : str = Field(...,description="The author of the thread")
+    authorID : str = Field(...,description="The id of the owner of the thread")

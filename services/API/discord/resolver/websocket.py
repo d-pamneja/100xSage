@@ -1,7 +1,7 @@
 from API.dependencies import discord,random,websockets, asyncio,json, DISCORD_GATEWAY_URL, DISCORD_AUTH_TOKEN, DISCORD_GUILD_ID, DISCORD_PARENT_ID
 from src.dependencies import logging, CustomException
 from API.utils import resolve_query
-from API.discord.utils import ThreadButton
+from API.discord.utils import ThreadButton,TicketButton
 from src.workers.resolver.utils import get_new_thread_summary
 
 
@@ -186,7 +186,7 @@ class DiscordWebSocket:
             await self.reconnect()
             raise
         
-    async def send_ai_response_to_thread(self, thread_id, ai_response, thread_link):
+    async def send_ai_response_to_thread(self, thread_id, thread_owner_id,ai_response, thread_link):
         """
         Utility function to send AI response as an embed with a button.
         """
@@ -215,7 +215,7 @@ class DiscordWebSocket:
 
         if not success:
             logging.error(f"Failed to send AI response to thread {thread_id}")
-
+            
 
     async def handle_thread_create(self, event):
         """Handle thread creation events"""
@@ -226,7 +226,8 @@ class DiscordWebSocket:
                 if parent_id == DISCORD_PARENT_ID:
                     thread = {
                         "id": event['d']['id'],
-                        "title": event['d']['name']
+                        "title": event['d']['name'],
+                        "authorID" : event['d']['owner_id']
                     }
                     self.threads.append(thread)
                     logging.info(f"New thread created: {thread['title']}")
@@ -251,13 +252,24 @@ class DiscordWebSocket:
                         if summarised_thread:
                             response = await resolve_query(summarised_thread)
                             logging.info(f"Resolver Response: {response}")
-                    
+
+                            thread_id = int(self.threads[-1]['id'])
+                            thread_owner_id = int(self.threads[-1]['authorID'])
                             
                             if(response['status']==200):    
-                                thread_id = int(self.threads[-1]['id'])
                                 thread_link = f"https://discord.com/channels/{DISCORD_GUILD_ID}/{DISCORD_PARENT_ID}/threads/{response['source']}"
 
-                                await self.send_ai_response_to_thread(thread_id, response['solution'], thread_link)
+                                await self.send_ai_response_to_thread(thread_id, thread_owner_id, response['solution'], thread_link)
+                                
+                            await asyncio.sleep(10)
+                            ticketView = TicketButton(thread_owner_id)
+                            ticketSuccess = await self.bot.send_thread_message(
+                                thread_id, 
+                                view = ticketView
+                            )
+                            
+                            if not ticketSuccess:
+                                logging.error(f"Failed to send AI response to thread {thread_id}")
                                  
                             
                             self.threads.clear()
