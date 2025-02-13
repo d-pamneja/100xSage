@@ -262,7 +262,7 @@ class DiscordWebSocket:
                                 await self.send_ai_response_to_thread(thread_id, thread_owner_id, response['solution'], thread_link)
                                 
                             await asyncio.sleep(10)
-                            ticketView = TicketButton(thread_owner_id)
+                            ticketView = TicketButton(thread_owner_id,1) # This courseID has to be made dynamic
                             ticketSuccess = await self.bot.send_thread_message(
                                 thread_id, 
                                 view = ticketView

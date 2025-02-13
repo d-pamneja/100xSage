@@ -16,6 +16,7 @@ import redis
 import threading
 import boto3
 import asyncio
+import aiohttp
 import json
 import sys
 import time

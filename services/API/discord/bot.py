@@ -82,7 +82,7 @@ async def answer_query(interaction : discord.Interaction,query : str):
                 color=0xE74C3C
             )
             
-            await interaction.followup.send(embed=embed)
+            await interaction.followup.send(embed=embed,ephemeral=True)
             return True
         else:            
             response = await search_query(query)
@@ -95,7 +95,7 @@ async def answer_query(interaction : discord.Interaction,query : str):
                     color=0x9B59B6
                 )
                 
-                await interaction.followup.send(embed=embed, view=button_view)
+                await interaction.followup.send(embed=embed, view=button_view,ephemeral=True)
                 
             elif(response['status']==404):
                 embed = discord.Embed(
@@ -104,7 +104,7 @@ async def answer_query(interaction : discord.Interaction,query : str):
                     color=0xF1C40F
                 )
                 
-                await interaction.followup.send(embed=embed, view=button_view)
+                await interaction.followup.send(embed=embed, view=button_view,ephemeral=True)
                 
             return True
     except discord.HTTPException as e:

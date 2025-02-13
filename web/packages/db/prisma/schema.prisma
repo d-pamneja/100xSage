@@ -21,7 +21,7 @@ model User {
   staff    Staff?
 
   created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  updated_at DateTime @updatedAt @default(now())
 }
 
 model Admin {
@@ -31,7 +31,7 @@ model Admin {
   courses Course[]
 
   created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  updated_at DateTime @updatedAt @default(now())
 }
 
 model Staff {
@@ -43,7 +43,7 @@ model Staff {
   tickets  Ticket[]
 
   created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  updated_at DateTime @updatedAt @default(now())
 }
 
 model Course {
@@ -56,7 +56,7 @@ model Course {
   contents    Content[]
 
   created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  updated_at DateTime @updatedAt @default(now())
 }
 
 model Content {
@@ -66,7 +66,7 @@ model Content {
   course    Course @relation(fields: [course_id], references: [id])
 
   created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  updated_at DateTime @updatedAt @default(now())
 }
 
 model Topic {
@@ -78,7 +78,7 @@ model Topic {
   staff       StaffTopic[]
 
   created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  updated_at DateTime @updatedAt @default(now())
 }
 
 model StaffTopic {
@@ -89,7 +89,7 @@ model StaffTopic {
   topic Topic @relation(fields: [topic_id], references: [id], onDelete: Cascade)
 
   created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  updated_at DateTime @updatedAt @default(now())
 
   @@id([staff_id, topic_id])
 }
@@ -103,7 +103,7 @@ model Ticket {
   staff       Staff  @relation(fields: [staff_id], references: [id], onDelete: Cascade)
 
   created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  updated_at DateTime @updatedAt @default(now())
 }
 
 enum Role {

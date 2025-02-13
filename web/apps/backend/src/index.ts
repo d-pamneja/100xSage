@@ -1,6 +1,6 @@
 import express from 'express'
 import { configDotenv } from 'dotenv'
-import appRouter from './api/routes'
+import appRouter from './api/routes/index'
 
 configDotenv()
 const port = process.env.PORT

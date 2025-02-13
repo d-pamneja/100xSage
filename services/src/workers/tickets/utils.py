@@ -65,7 +65,7 @@ def get_ticket(thread, run):
         raise CustomException(e,sys)
     
     
-def new_ticket(conversation,thread_id):
+async def new_ticket(conversation,thread_id):
     """
         Function to get the Q&A pair generated given the conversation and prepare it as a dictionary, with conversation ID as the key (dummy id generated using uuid for now).
         
