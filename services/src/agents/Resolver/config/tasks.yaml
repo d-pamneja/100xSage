@@ -1,0 +1,41 @@
+research:
+  description: >
+    To research and find the most relevant documents and references to the given query: {query}
+  expected_output: >
+    A list consisting of all the relevant documents, where each document (JSON) follows the structure:
+      - id: The thread ID of that conversation on Discord
+      - score: The relevance of the said document, with 0 being the lowest, 1 being the highest, and -1 being irrelevant
+      - question: The primary question which was asked in the thread
+      - answer: The answer/solution which was provided to that thread
+  agent: >
+    researcher
+  parameters: >
+    query: str
+  output_pydantic: >
+    ResearcherOutput
+
+write:
+  description: >
+    To write content providing the solution to the query: {query}, given the research done by the researcher
+  expected_output: >
+    A JSON object consisting of all the content written by the writer, where it follows the structure:
+      - id (optional): The thread ID of that conversation on Discord, only if the writer is able to find relevant content.
+      - content: The content piece written by the writer, if they are supported by the research team.
+  agent: >
+    writer
+  output_pydantic: >
+    WriterOutput
+
+edit:
+  description: >
+    To edit and give the status of work and final output as a recommendation to the student, if any content is given by the writer
+  expected_output: >
+    A JSON object consisting of all the final output given by the editor, with the following structure:
+      - status: The status code of the team's findings. If any content is given by the writer, then 200, else 404.
+      - relevance: A boolean value indicating whether the team was able to complete the task or not.
+      - solution: The final edited solution from the editor. If none, then return the string "NA".
+      - source: The exact thread ID on Discord from which this solution is quoted. If none, then return the string "NA".
+  agent: >
+    editor
+  output_pydantic: >
+    EditorOutput

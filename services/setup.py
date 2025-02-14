@@ -5,9 +5,13 @@ with open("requirements.txt") as f:
     
 setup(
     name="100xSage",
-    version="0.0.2",
+    version="0.0.4",
     author="Dhruv Pamneja",
     author_email="dpamneja@gmail.com",
     install_requires=[requirements],
-    packages=find_packages()
+    packages=find_packages(),
+    include_package_data=True,
+    package_data={
+        "src.agents.Resolver.config": ["*.yaml"],
+    },
 )

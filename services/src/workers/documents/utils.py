@@ -1,5 +1,5 @@
 from src.workers.documents.instances import index_knowledge_base
-from src.workers.utils import get_embedding
+from src.utils import get_embedding
 from src.dependencies import os,sys,requests,TextLoader,PyPDFLoader,RecursiveCharacterTextSplitter
 from src.exception import CustomException
 from src.logger import logging

@@ -1,14 +1,13 @@
 {
   "compilerOptions": {
     "target": "es2016",
-    "module": "Node16",
+    "module": "commonjs",
     "rootDir": "./src",
     "outDir": "./dist",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "skipLibCheck": true,
-    "moduleResolution": "node16"
+    "skipLibCheck": true
   },
   "exclude": ["node_modules"]
 }

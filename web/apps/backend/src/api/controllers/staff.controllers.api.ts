@@ -3,7 +3,6 @@ import { S3Client,GetObjectCommand, HeadObjectCommand, PutObjectCommand, DeleteO
 import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
-import {prisma} from "@web/db";
 
 import dotenv from 'dotenv'; 
 dotenv.config()

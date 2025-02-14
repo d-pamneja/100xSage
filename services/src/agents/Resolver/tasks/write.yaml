@@ -1,0 +1,8 @@
+write:
+  description: "To write content providing the solution to the query: {query}, given the research done by the researcher"
+  expected_output: |
+    A JSON object consisting of all the content written by the writer, where it follows the structure:
+      - id (optional): The thread ID of that conversation on Discord, only if the writer is able to find relevant content.
+      - content: The content piece written by the writer, if they are supported by the research team.
+  agent: writer
+  output_pydantic: WriterOutput

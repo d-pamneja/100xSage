@@ -1,15 +1,22 @@
 # Importing the dependencies
-from API.dependencies import Lock,FastAPI,CORSMiddleware,ThreadPoolExecutor
-from src.dependencies import time,logging
-from src.workers.documents.instances import knowledge_base_SQS_queue
-from src.workers.QA.instances import QA_base_SQS_queue
-from API.utils import process_incoming_SQS_knowledge_base,process_incoming_SQS_QA_base
+from API.dependencies import Lock,FastAPI,CORSMiddleware,ThreadPoolExecutor,DISCORD_BOT_TOKEN
+from API.dependencies import HTTPException,asyncio
+from API.schemas.agents.resolver import ResolverInput
+from API.polling.pollers import KB_sqs_polling,QA_sqs_polling
+from API.utils import resolve_query
+from API.discord.resolver.websocket import persist_discord_connection
+from API.discord.bot import bot,run_discord_bot
+
+from src.dependencies import logging,json
+from src.exception import CustomException
+from src.agents.Resolver.schemas.editor import EditorOutput
+
 
 # Global Lock for SQS Messages
 message_processing_lock = Lock()
 
 # Initialising the API from FastAPI and APIRouter
-app = FastAPI(prefix="/services")
+app = FastAPI()
 origins = [
     "http://localhost:3001",
 ]
@@ -22,47 +29,30 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-def KB_sqs_polling():
-    while True:
-        response = knowledge_base_SQS_queue.receive_messages(
-            MaxNumberOfMessages=1,
-            MessageAttributeNames=["All"],
-            VisibilityTimeout=10,
-        )
-
-        if response:
-            message = response[0]
-            if(message is not None):
-                process_incoming_SQS_knowledge_base(message)
-
-        time.sleep(5) 
-        
-def QA_sqs_polling():
-    while True:
-        response = QA_base_SQS_queue.receive_messages(
-            MaxNumberOfMessages=1,
-            MessageAttributeNames=["All"],
-            VisibilityTimeout=10,
-        )
-
-        if response:
-            message = response[0]
-            if(message is not None):
-                process_incoming_SQS_QA_base(message)
-
-        time.sleep(5) 
-
-
 # Startup event to launch polling as a thread
 @app.on_event("startup")
 async def startup_event():
-    logging.info("Starting SQS polling...")
+    logging.info("Starting background tasks and processes...")
+    asyncio.create_task(run_discord_bot())
+    asyncio.create_task(persist_discord_connection(bot))
+    
     executor = ThreadPoolExecutor(max_workers=8)
     
     executor.submit(KB_sqs_polling)
     executor.submit(QA_sqs_polling)
     
+        
 @app.get("/")
 def home():
     return "Hello from 100xSage Services!"
+
+
+@app.post("/services/resolve",response_model = EditorOutput)
+async def resolver(userInput : ResolverInput):
+    """Endpoint to recommend answer to user query if solved previously from threads"""
+    try:
+        return resolve_query(userInput.query)
+    except CustomException as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Internal Server Error: {e}")  

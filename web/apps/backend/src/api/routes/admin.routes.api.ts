@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getObject, removeObject, send_DELETE_SQS, send_POST_SQS, setObject } from "../controllers/admin.controllers.api";
+import { getObject, removeObject, send_DELETE_SQS, send_POST_SQS, setObject } from "../controllers/admin.controllers.api"
 
 export const adminRouter = Router()
 

@@ -1,0 +1,68 @@
+{
+  "type": 0,
+  "tts": false,
+  "timestamp": "2025-02-07T05:31:18.730000+00:00",
+  "pinned": false,
+  "nonce": "1337294599609122816",
+  "mentions": [],
+  "mention_roles": [],
+  "mention_everyone": false,
+  "member": {
+    "roles": [
+      "1269251859789512736",
+      "1264392305150918800",
+      "1264392084815609940",
+      "1268890818039517305",
+      "1264392533484634202",
+      "1264392051546656859",
+      "1272402368843087933",
+      "1264392415280627742"
+    ],
+    "premium_since": null,
+    "pending": false,
+    "nick": "TA Harry Potter",
+    "mute": false,
+    "joined_at": "2024-08-02T11:21:11.394000+00:00",
+    "flags": 0,
+    "deaf": false,
+    "communication_disabled_until": null,
+    "banner": null,
+    "avatar": null
+  },
+  "id": "1337294601500758107",
+  "flags": 0,
+  "embeds": [],
+  "edited_timestamp": null,
+  "content": "it's import export problem",
+  "components": [],
+  "channel_type": 0,
+  "channel_id": "1263932829642002453",
+  "author": {
+    "username": "praa.sh",
+    "public_flags": 0,
+    "primary_guild": null,
+    "id": "1058038360360370196",
+    "global_name": "Praash",
+    "discriminator": "0",
+    "clan": null,
+    "avatar_decoration_data": null,
+    "avatar": "251caad538a024910e1a9e2da8ff0a9e"
+  },
+  "attachments": [
+    {
+      "width": 800,
+      "url": "https://cdn.discordapp.com/attachments/1263932829642002453/1337294601517793280/Screenshot_2025-02-07_at_11.01.09_AM.png?ex=67a6ec26&is=67a59aa6&hm=415a33b730b7f723429e6f14ed2c5034578aa6df181c2de76e54c3128ce256ce&",
+      "title": "Screenshot 2025-02-07 at 11.01.09\u202fAM",
+      "size": 41403,
+      "proxy_url": "https://media.discordapp.net/attachments/1263932829642002453/1337294601517793280/Screenshot_2025-02-07_at_11.01.09_AM.png?ex=67a6ec26&is=67a59aa6&hm=415a33b730b7f723429e6f14ed2c5034578aa6df181c2de76e54c3128ce256ce&",
+      "placeholder_version": 1,
+      "placeholder": "SvgFCoBvZ3h5h1eoXJsg/Oo=",
+      "id": "1337294601517793280",
+      "height": 212,
+      "filename": "Screenshot_2025-02-07_at_11.01.09_AM.png",
+      "content_type": "image/png",
+      "content_scan_version": 1
+    }
+  ],
+  "guild_id": "1263912990160457738"
+}
