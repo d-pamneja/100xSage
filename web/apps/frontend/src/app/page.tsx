@@ -1,23 +1,24 @@
 import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
+import Header from "@/sections/landing/Header";
 
 import Link from "next/link";
 import HeroSection from "./_components/hero-section";
 import FeatureList from "./_components/feature-list";
 import CardGrid from "./_components/card-grid";
 import HeroImage from "./_components/hero-image";
-import Title from "./_components/title";
+import Hero from "@/sections/landing/Hero";
+
 export default function LandingPage() {
   return (
     <div className="">
+      <Header/>
       <Container>
-        <header className="mx-auto mt-40 max-w-5xl">
-          <Title />
-          <HeroSection />
-          <HeroImage />
-        </header>
+        <main className="mx-4 my-4">
+          <Hero/>
+        </main>
       </Container>
-      <Container>
+      {/* <Container>
         <main className="mx-auto max-w-5xl">
           <FeatureList />
           <CardGrid />
@@ -44,7 +45,7 @@ export default function LandingPage() {
             </div>
           </div>
         </footer>
-      </Container>
+      </Container> */}
     </div>
   );
 }

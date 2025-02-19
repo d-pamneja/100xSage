@@ -33,8 +33,17 @@ body {
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
     --radius: 0.5rem;
+    --color-violet-400: #8B5CF6;
+    --color-fuchsia-400: #D946EF; 
+    --color-purple-500: #A855F7;
+    --color-indigo-500: #6366F1; 
+  }
+
+  .border-gradient { 
+    @apply border-2 border-transparent [background:linear-gradient(black,black)_padding-box,conic-gradient(from_45deg,var(--color-violet-400),var(--color-fuchsia-400),var(--color-purple-500),var(--color-indigo-500))_border-box] hover:shadow-[0px_0px_12px_4px_var(--color-fuchsia-400)]
   }
 }
+
 @layer base {
   body {
     @apply bg-background text-foreground;
