@@ -32,7 +32,7 @@ const LoginForm = () => {
       username: data.username,
       password: data.password,
       redirect: true,
-      redirectTo: "/dashboard",
+      redirectTo: "/adminDashboard",
     });
     if (resp?.error) {
       form.setError(

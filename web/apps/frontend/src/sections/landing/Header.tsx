@@ -5,6 +5,7 @@ import Logo from "@/app/_components/header/logo";
 import Buttons from "@/app/_components/header/buttons";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import Link from "next/link";
 import { useMediaQuery } from "react-responsive";
 
 export const HomePageNavItems = [
@@ -72,12 +73,16 @@ export const Header = () => {
                         ))}
 
                         <div id="buttons-section" className="flex gap-4 mx-4">
-                            <Button variant={"gradient"}>
-                                LOGIN
-                            </Button>
-                            <Button>
-                                SIGN UP
-                            </Button>
+                            <Link href='/login'>
+                                <Button variant={"gradient"}>
+                                    LOGIN
+                                </Button>
+                            </Link>
+                            <Link href='/signup'>
+                                <Button>
+                                    SIGN UP
+                                </Button>
+                            </Link>
                         </div>
                     </nav>    
                 </div>

@@ -1,6 +1,6 @@
 "use server";
 import { prisma } from "@/lib/prisma";
-import bcrypt from "bcrypt";
+import bcrypt from 'bcryptjs';
 
 export async function signUpUser({
   username,
@@ -10,24 +10,38 @@ export async function signUpUser({
   password: string;
 }) {
   try {
-    await prisma.user.create({
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await prisma.user.create({
       data: {
         username,
-        password: await bcrypt.hash(password, 10),
+        password: hashedPassword,
         role: "ADMIN",
+        admin_id: ""
       },
     });
-    return {
-      status: 200,
-    };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    if (error.name === "PrismaClientKnownRequestError") {
-      if (error.code == "P2002") {
-        console.log("Error code P2002: Unique constraint violation");
-        return { status: 409, error: "Username already taken." };
-      }
+
+    if (user.role === "ADMIN") {
+      await prisma.$transaction([
+        prisma.user.update({
+          where: { id: user.id },
+          data: { admin_id: user.id },
+        }),
+        prisma.admin.create({
+          data: {
+            id: user.id,
+          },
+        }),
+      ]);      
     }
-    return { status: 500, error: "Failed to sign up " };
+
+
+
+    return { status: 200, user };
+  } catch (error: any) {
+    if (error.code === "P2002") {
+      return { status: 409, error: "Username already taken.",details : error.message };
+    }
+    return { status: 500, error: "Internal server error",details : error.message };
   }
 }

@@ -1,7 +1,6 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
-
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
@@ -24,8 +23,10 @@ const buttonVariants = cva(
       size: {
         default: "h-9 px-4 py-2",
         sm: "h-8 rounded-md px-3 text-xs",
+        md : "h-9 rounded-md px-5",
         lg: "h-10 rounded-md px-8",
-        icon: "h-9 w-9"
+        icon: "h-9 w-9",
+        smNoShadow : "rounded-xl px-2 py-1 mx-2"
       },
     },
     defaultVariants: {
@@ -40,6 +41,7 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
 }
+
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
