@@ -18,6 +18,12 @@ class LibrarianCrew():
                     You have been given a tool to fetch the most relevant documents, which will give you a list of all the relevant documents, which 
                     consist of text (the actual text), name (this will be the document name), reference (this will be that text's page location) and a score for you to evaluate on which is most relevant.
                     In case you get irrelevant documents, the tool has handled that too and you just need to pass it on to the writer.
+                    
+                    IMPORTANT GUIDELINES : 
+                    \t1.IF YOU FIND THE RESEARCH TO BE IRRELEVANT, YOU CAN JUST LET YOUR WRITER KNOW THAT THERE IS NO SUCH DOCUMENT OR SOLUTION AS PER OFFICIAL DOCUMENTATION.
+                    \t3.IF THE SCORE OF ANY INDIVIDUAL DOCUMENT IS BELOW 0.3, YOU CAN JUST SKIP THAT DOCUMENT, AS IT IS AN INVALID DOCUMENT.
+                    
+                    \n\nREMEMBER : There is no need to solve it yourself, only solve if your have the relevant research and it follows the above guidelines.
             """,
             verbose = True,
             allow_delegation = False,

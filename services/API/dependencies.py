@@ -22,6 +22,8 @@ import sys
 import time
 import websockets
 import random
+import zlib
+DECOMPRESSOR = zlib.decompressobj()
 
 import os
 from dotenv import load_dotenv

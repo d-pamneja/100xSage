@@ -1,4 +1,4 @@
-from API.dependencies import discord,random,websockets, asyncio,json, DISCORD_GATEWAY_URL, DISCORD_AUTH_TOKEN, DISCORD_GUILD_ID, DISCORD_PARENT_ID
+from API.dependencies import discord,random,websockets, asyncio,json, DECOMPRESSOR,DISCORD_GATEWAY_URL, DISCORD_AUTH_TOKEN, DISCORD_GUILD_ID, DISCORD_PARENT_ID
 from src.dependencies import logging, CustomException
 from API.utils import resolve_query
 from API.discord.utils import ThreadButton,TicketButton
@@ -57,15 +57,6 @@ class DiscordWebSocket:
             
         self.heartbeat_interval = hello_event['d']['heartbeat_interval'] / 1000
         
-        await self.send_json_request({
-            "op": 1,
-            "d": self.last_sequence
-        })
-        
-        response = await self.receive_json_response()
-        if response['op'] != 11:
-            raise CustomException("Expected HEARTBEAT_ACK after initial heartbeat")
-        
         identify_payload = {
             "op": 2,
             "d": {
@@ -75,18 +66,32 @@ class DiscordWebSocket:
                     "$os": "linux",
                     "$browser": "sage_resolver_discord_bot",
                     "$device": "cloud_server"
-                }
+                },
+                "compress": True
             }
         }
         
         await self.send_json_request(identify_payload)
         
+        await self.send_json_request({
+            "op": 1,
+            "d": self.last_sequence
+        })
+        
         while True:
             event = await self.receive_json_response()
+            if event['op'] == 11: 
+                self.heartbeat_ack_received = True
+                continue
             if event['op'] == 0 and event['t'] == 'READY':
                 self.session_id = event['d']['session_id']
                 self.resume_gateway_url = event['d'].get('resume_gateway_url')
+                print(f"Successfully established new session {self.session_id}")
                 break
+            elif event['op'] == 9:  
+                raise CustomException("Discord rejected session")
+            elif event['op'] == 7:  
+                raise CustomException("Discord requested reconnect")
 
     async def resume_session(self):
         """Attempt to resume an existing session"""
@@ -125,7 +130,7 @@ class DiscordWebSocket:
                 logging.debug("Heartbeat sent!")
                 
         except asyncio.CancelledError:
-            logging.info("Heartbeat loop cancelled")
+            print("Heartbeat loop cancelled")
         except Exception as e:
             logging.error(f"Heartbeat loop failed: {str(e)}")
             await self.reconnect()
@@ -135,7 +140,7 @@ class DiscordWebSocket:
         self.reconnect_attempt += 1
         delay = min(2 ** self.reconnect_attempt, self.max_reconnect_delay)
         
-        logging.info(f"Attempting to reconnect in {delay} seconds (attempt {self.reconnect_attempt})")
+        print(f"Attempting to reconnect in {delay} seconds (attempt {self.reconnect_attempt})")
         
         if self.ws:
             try:
@@ -167,18 +172,22 @@ class DiscordWebSocket:
             raise CustomException("WebSocket not connected")
         try:
             response = await self.ws.recv()
+
+            if isinstance(response, bytes):
+                response = DECOMPRESSOR.decompress(response).decode('utf-8')
+
             data = json.loads(response)
-            
+
             if 's' in data and data['s'] is not None:
                 self.last_sequence = data['s']
-                
-            if data['op'] == 11: 
+
+            if data['op'] == 11:
                 self.heartbeat_ack_received = True
                 logging.debug("Received heartbeat acknowledgment")
-                
+
             return data
         except websockets.exceptions.ConnectionClosed as e:
-            logging.info(f"WebSocket connection closed: {e.code} {e.reason}")
+            print(f"WebSocket connection closed: {e.code} : {e}")
             await self.reconnect()
             raise
         except Exception as e:
@@ -230,7 +239,7 @@ class DiscordWebSocket:
                         "authorID" : event['d']['owner_id']
                     }
                     self.threads.append(thread)
-                    logging.info(f"New thread created: {thread['title']}")
+                    print(f"New thread created: {thread['title']}")
 
     async def handle_message_create(self, event):
         """Handle message creation events"""
@@ -251,7 +260,7 @@ class DiscordWebSocket:
                         summarised_thread = get_new_thread_summary(self.threads[-1])
                         if summarised_thread:
                             response = await resolve_query(summarised_thread)
-                            logging.info(f"Resolver Response: {response}")
+                            print(f"Resolver Response: {response}")
 
                             thread_id = int(self.threads[-1]['id'])
                             thread_owner_id = int(self.threads[-1]['authorID'])
@@ -283,7 +292,7 @@ class DiscordWebSocket:
                 event = await self.receive_json_response()
                 
                 if event['op'] == 7:  
-                    logging.info("Received RECONNECT request from Discord")
+                    print("Received RECONNECT request from Discord")
                     await self.reconnect()
                     return
                 elif event['op'] == 9:  
