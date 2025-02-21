@@ -1,10 +1,10 @@
 'use client'
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { cn } from "../../lib/utils"
+import { cn } from "@/lib/utils";
 import { IoIosAdd } from "react-icons/io";
 import { useMediaQuery } from "react-responsive";
-import { Button } from '../../components/ui/button'
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from 'react-hot-toast';
@@ -18,12 +18,11 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { useForm,SubmitHandler } from "react-hook-form"
-import { prisma } from "@/lib/prisma";
 import { Session } from "next-auth";
 import addCourse from "@/actions/admin/add-course";
 
 
-export const ButtonDiv = ({session,className} : {session: Session, className? : string} )=> {
+export const AddCoursesSection = ({session,className} : {session: Session, className? : string} )=> {
     // Course Form and Functionalities
     const courseFormSchema = z.object({
       title: z.string().min(1, "Kindly enter a valid title."),
@@ -132,4 +131,4 @@ export const ButtonDiv = ({session,className} : {session: Session, className? : 
     )
 }
 
-export default {ButtonDiv}
+export default {AddCoursesSection}
