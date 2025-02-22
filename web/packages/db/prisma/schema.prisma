@@ -57,9 +57,20 @@ model Content {
   id         Int      @id @default(autoincrement())
   key        String
   course_id  Int
+  topic_id   Int
+  type_id    Int
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
   course     Course   @relation(fields: [course_id], references: [id])
+  topic      Topic   @relation(fields: [topic_id], references: [id])
+  type       ContentType   @relation(fields: [type_id], references: [id])
+}
+
+model ContentType {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(50)
+  description String  @db.VarChar(200)
+  contents    Content[]
 }
 
 model Topic {
@@ -69,8 +80,9 @@ model Topic {
   course_id   Int
   created_at  DateTime     @default(now())
   updated_at  DateTime     @default(now()) @updatedAt
-  staff       StaffTopic[]
   course      Course       @relation(fields: [course_id], references: [id])
+  staff       StaffTopic[]
+  contents    Content[]    
 }
 
 model StaffTopic {
